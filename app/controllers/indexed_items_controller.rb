@@ -15,12 +15,21 @@ class IndexedItemsController < ApplicationController
   private
 
   def url
-    params.require(:indexed_item).permit(:url)[:url]
+    params.require(:url)
+  end
+
+  def nodes
+    Nokogiri::HTML(open(url)).css('h1,h2,h3,a')
   end
 
   def content
-    Nokogiri::HTML(open(url)).css('h1,h2,h3,a').map do |node|
-      node.name == 'a' ? node.attributes['href'].value : node.content
-    end.to_json
+    nodes.each_with_object([]) do |node, result|
+      if node.name == 'a'
+        href = node.attributes['href']
+        result << href if href.present?
+      else
+        result << node.content
+      end
+    end.join(', ')
   end
 end

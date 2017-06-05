@@ -19,6 +19,7 @@ describe IndexedItemsController, type: :controller do
         <h3>h3 content</h3>
         <h4>h4 content</h4>
         <a href="https://item.com">a content</a>
+        <a>other content</a>
       HTML
     end
 
@@ -27,9 +28,9 @@ describe IndexedItemsController, type: :controller do
     end
 
     it 'creates indexed item' do
-      post :create, params: { indexed_item: { url: url } }
+      post :create, params: { url: url }
 
-      expect(json[:content]).to eq(['h1 content', 'h2 content', 'h3 content', 'https://item.com'].to_json)
+      expect(json[:content]).to eq(['h1 content', 'h2 content', 'h3 content', 'https://item.com'].join(', '))
     end
 
     context 'when indexed item already exists' do
@@ -37,11 +38,10 @@ describe IndexedItemsController, type: :controller do
 
       it 'overwrites existing item' do
         create :indexed_item, url: url, content: 'some content'
-        stub_request(:get, url).to_return(body: body)
 
-        post :create, params: { indexed_item: { url: url } }
+        post :create, params: { url: url }
 
-        expect(json[:content]).to eq([].to_json)
+        expect(json[:content]).to eq('')
       end
     end
   end
