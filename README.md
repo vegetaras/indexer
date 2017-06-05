@@ -1,24 +1,11 @@
-# README
+# Indexer
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Indexer is a RESTful API which allows to index a page's content.
 
-Things you may want to cover:
+## API
 
-* Ruby version
+Indexer consists of two endpoints:
 
-* System dependencies
+* GET `/indexed_items`. Returns indexed items.
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* POST `/indexed_items.`. Params: `url` - url of a page to index. Indexes a page and creates indexed item.
